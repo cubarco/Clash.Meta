@@ -5,6 +5,7 @@ import (
 	"net"
 	"net/url"
 	"strings"
+	"time"
 
 	"github.com/Dreamacro/clash/adapter/inbound"
 	C "github.com/Dreamacro/clash/constant"
@@ -84,6 +85,7 @@ func New(config LC.VmessServer, tcpIn chan<- C.ConnContext, udpIn chan<- C.Packe
 					continue
 				}
 				_ = c.(*net.TCPConn).SetKeepAlive(true)
+				_ = c.(*net.TCPConn).SetKeepAlivePeriod(3600 * time.Second)
 
 				go sl.HandleConn(c, tcpIn)
 			}
