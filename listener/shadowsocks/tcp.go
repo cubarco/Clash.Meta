@@ -3,6 +3,7 @@ package shadowsocks
 import (
 	"net"
 	"strings"
+	"time"
 
 	"github.com/Dreamacro/clash/adapter/inbound"
 	N "github.com/Dreamacro/clash/common/net"
@@ -60,6 +61,7 @@ func New(config LC.ShadowsocksServer, tcpIn chan<- C.ConnContext, udpIn chan<- C
 					continue
 				}
 				_ = c.(*net.TCPConn).SetKeepAlive(true)
+				_ = c.(*net.TCPConn).SetKeepAlivePeriod(3600 * time.Second)
 				go sl.HandleConn(c, tcpIn)
 			}
 		}()

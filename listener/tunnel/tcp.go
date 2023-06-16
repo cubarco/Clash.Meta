@@ -3,6 +3,7 @@ package tunnel
 import (
 	"fmt"
 	"net"
+	"time"
 
 	"github.com/Dreamacro/clash/adapter/inbound"
 	C "github.com/Dreamacro/clash/constant"
@@ -35,6 +36,7 @@ func (l *Listener) Close() error {
 
 func (l *Listener) handleTCP(conn net.Conn, in chan<- C.ConnContext, additions ...inbound.Addition) {
 	conn.(*net.TCPConn).SetKeepAlive(true)
+	conn.(*net.TCPConn).SetKeepAlivePeriod(3600 * time.Second)
 	ctx := inbound.NewSocket(l.target, conn, C.TUNNEL, additions...)
 	ctx.Metadata().SpecialProxy = l.proxy
 	in <- ctx
